@@ -1,0 +1,354 @@
+/* Font loaded via next/font in layout.tsx — no external @import needed */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Brand tokens ───────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --brand-primary:  #102f61;
+  --brand-mid:      #1468a8;
+  --brand-accent:   #11b7a2;
+
+  /* Orb colours — boosted opacity so gradients are clearly visible */
+  --orb-teal:    rgba(17, 183, 162, 0.52);
+  --orb-cyan:    rgba(6, 182, 212, 0.42);
+  --orb-violet:  rgba(124, 58, 237, 0.30);
+  --orb-emerald: rgba(16, 185, 129, 0.38);
+  --orb-indigo:  rgba(99, 102, 241, 0.28);
+  --orb-sky:     rgba(14, 165, 233, 0.38);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  /* crisp white so the vivid orb gradients pop clearly */
+  background: #f8fffd;
+  color: #0f172a;
+  /* --font-inter is injected by next/font; system-ui renders instantly as fallback */
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Dot Matrix Overlay ─────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(15, 47, 97, 0.07) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* ─── Text selection ─────────────────────────────────────── */
+::selection { background: #a7f3d0; color: #102f61; }
+
+/* ─── Scroll-bar ─────────────────────────────────────────── */
+::-webkit-scrollbar            { width: 6px; }
+::-webkit-scrollbar-track      { background: #f1f5f9; }
+::-webkit-scrollbar-thumb      { background: #a5f3e8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: #5eead4; }
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATED BACKGROUND ORBS
+   Each orb is a blurred radial-gradient circle that drifts
+   slowly around its anchor point.
+══════════════════════════════════════════════════════════════ */
+
+/* Shared orb base */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  will-change: transform;
+  mix-blend-mode: normal;
+}
+
+/* ── Orb 1 — teal, top-left ── */
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  top: -120px;
+  left: -160px;
+  background: radial-gradient(circle, var(--orb-teal) 0%, transparent 72%);
+  animation: drift-1 18s ease-in-out infinite;
+}
+
+/* ── Orb 2 — violet, top-right ── */
+.orb-2 {
+  width: 520px;
+  height: 520px;
+  top: -80px;
+  right: -140px;
+  background: radial-gradient(circle, var(--orb-violet) 0%, transparent 70%);
+  animation: drift-2 22s ease-in-out infinite;
+}
+
+/* ── Orb 3 — sky-blue, bottom-center ── */
+.orb-3 {
+  width: 700px;
+  height: 700px;
+  bottom: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--orb-sky) 0%, transparent 68%);
+  animation: drift-3 26s ease-in-out infinite;
+}
+
+/* ── Orb 4 — emerald, bottom-left ── */
+.orb-4 {
+  width: 460px;
+  height: 460px;
+  bottom: 80px;
+  left: -100px;
+  background: radial-gradient(circle, var(--orb-emerald) 0%, transparent 72%);
+  animation: drift-4 20s ease-in-out infinite;
+}
+
+/* ── Orb 5 — indigo, mid-right ── */
+.orb-5 {
+  width: 380px;
+  height: 380px;
+  top: 38%;
+  right: -80px;
+  background: radial-gradient(circle, var(--orb-indigo) 0%, transparent 70%);
+  animation: drift-5 24s ease-in-out infinite;
+}
+
+/* ── Aurora shimmer bar at top of page ── */
+.aurora-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(17, 183, 162, 0.7) 20%,
+    rgba(20, 104, 168, 0.8) 50%,
+    rgba(124, 58, 237, 0.6) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: aurora-slide 6s linear infinite;
+}
+
+/* ─── Drift keyframes ────────────────────────────────────── */
+
+/* Orb 1 — large lazy sweep, top-left */
+@keyframes drift-1 {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  25%  { transform: translate(60px, 40px) scale(1.05); }
+  50%  { transform: translate(30px, 80px) scale(0.97); }
+  75%  { transform: translate(-30px, 50px) scale(1.03); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Orb 2 — violet, counter-clockwise-ish */
+@keyframes drift-2 {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  30%  { transform: translate(-50px, 60px) scale(1.06); }
+  60%  { transform: translate(-20px, 110px) scale(0.95); }
+  80%  { transform: translate(40px, 40px) scale(1.04); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Orb 3 — bottom-center, gentle bob */
+@keyframes drift-3 {
+  0%   { transform: translateX(-50%) translateY(0px) scale(1); }
+  33%  { transform: translateX(-48%) translateY(-60px) scale(1.04); }
+  66%  { transform: translateX(-52%) translateY(-30px) scale(0.96); }
+  100% { transform: translateX(-50%) translateY(0px) scale(1); }
+}
+
+/* Orb 4 — emerald, slower diagonal */
+@keyframes drift-4 {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  40%  { transform: translate(70px, -60px) scale(1.07); }
+  70%  { transform: translate(40px, -100px) scale(0.94); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Orb 5 — indigo, right-side drift */
+@keyframes drift-5 {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  35%  { transform: translate(-40px, 70px) scale(1.05); }
+  65%  { transform: translate(-60px, 20px) scale(0.97); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+/* Aurora slide */
+@keyframes aurora-slide {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Component Layer ────────────────────────────────────── */
+@layer components {
+
+  /* Eyebrow label */
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.2em] text-teal-700;
+  }
+
+  /* Primary CTA button */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-brand-gradient font-semibold text-white
+           shadow-[0_10px_24px_rgba(15,126,153,0.22)]
+           transition-all duration-300
+           hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(15,126,153,0.32)]
+           focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2;
+  }
+
+  /* Secondary ghost button */
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80
+           font-semibold text-slate-700 shadow-sm backdrop-blur-sm
+           transition-all duration-300
+           hover:-translate-y-0.5 hover:border-teal-200 hover:text-teal-800 hover:shadow-md
+           focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2;
+  }
+
+  /* Glass card */
+  .glass-card {
+    @apply rounded-3xl border border-white/60 bg-white/80 backdrop-blur-md shadow-sm;
+  }
+
+  /* Bento card */
+  .bento-card {
+    @apply relative overflow-hidden rounded-3xl border border-slate-200/80
+           bg-white/75 backdrop-blur-md p-6 shadow-sm
+           transition-all duration-500 cursor-default;
+  }
+
+  /* Section container */
+  .section-wrap {
+    @apply px-5 py-24 sm:px-8 sm:py-32;
+  }
+
+  /* Inner max-width container */
+  .inner {
+    @apply mx-auto max-w-7xl;
+  }
+
+  /* Mesh orb (ambient gradient blob) */
+  .mesh-orb {
+    @apply pointer-events-none absolute rounded-full blur-3xl opacity-60;
+  }
+
+  /* Step indicator dot */
+  .step-dot {
+    @apply h-2.5 w-2.5 rounded-full transition-all duration-300;
+  }
+
+  /* Trust badge pill */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 rounded-full border border-slate-200/80
+           bg-white/70 backdrop-blur-sm px-4 py-2 text-xs font-semibold text-slate-600 shadow-sm;
+  }
+
+  /* Modal overlay backdrop */
+  .modal-backdrop {
+    @apply fixed inset-0 z-[80] bg-slate-950/60 backdrop-blur-sm;
+  }
+
+  /* Slider track */
+  .slider-track {
+    @apply w-full h-1.5 rounded-full bg-slate-200 appearance-none cursor-pointer
+           accent-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-1;
+  }
+}
+
+/* ─── Animated Gradient Border (bento hover) ─────────────── */
+@keyframes glow-border {
+  0%, 100% { border-color: rgba(17, 183, 162, 0.35); box-shadow: 0 0 24px rgba(17, 183, 162, 0.12); }
+  50%       { border-color: rgba(20, 104, 168, 0.5);  box-shadow: 0 0 48px rgba(20, 104, 168, 0.18); }
+}
+
+.bento-card:hover {
+  animation: glow-border 2.5s ease-in-out infinite;
+  border-color: rgba(17, 183, 162, 0.35);
+  box-shadow: 0 0 24px rgba(17, 183, 162, 0.12), 0 12px 44px rgba(15, 23, 42, 0.09);
+}
+
+/* ─── Marquee animation (trust strip) ───────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-inner {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+.marquee-inner:hover { animation-play-state: paused; }
+
+/* ─── Range input custom styling ────────────────────────── */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #11b7a2 var(--val, 50%), #e2e8f0 var(--val, 50%));
+  outline: none;
+  cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #11b7a2;
+  box-shadow: 0 2px 8px rgba(17, 183, 162, 0.3);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  box-shadow: 0 4px 16px rgba(17, 183, 162, 0.45);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #11b7a2;
+  box-shadow: 0 2px 8px rgba(17, 183, 162, 0.3);
+  cursor: pointer;
+}
+
+/* ─── Headless UI transition helpers ────────────────────── */
+.dialog-enter        { opacity: 0; transform: scale(0.95); }
+.dialog-enter-active { opacity: 1; transform: scale(1); transition: all 0.25s ease-out; }
+.dialog-leave        { opacity: 1; transform: scale(1); }
+.dialog-leave-active { opacity: 0; transform: scale(0.95); transition: all 0.2s ease-in; }
+
+/* ─── Floating badge animation ──────────────────────────── */
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.float-badge { animation: float-badge 4.5s ease-in-out infinite; }
+
+/* ─── Number counter flash ──────────────────────────────── */
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.counter-animate { animation: counter-up 0.4s ease-out forwards; }
